@@ -1,0 +1,10 @@
+﻿  Main.cpp
+C:\Dev\HM1_Praktikum1\HM1_Praktikum1\Vektor.h(59,3): error C2143: syntax error: missing ';' before 'for'
+  (compiling source file 'Main.cpp')
+  
+C:\Dev\HM1_Praktikum1\HM1_Praktikum1\Vektor.h(61,3): error C2143: syntax error: missing ';' before '}'
+  (compiling source file 'Main.cpp')
+  
+C:\Dev\HM1_Praktikum1\HM1_Praktikum1\Vektor.h(60,12): warning C4834: discarding return value of function with [[nodiscard]] attribute
+  (compiling source file 'Main.cpp')
+  
