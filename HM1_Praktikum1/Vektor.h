@@ -11,6 +11,11 @@ private:
 
 public:
 
+	CMyVektor() {}
+
+	CMyVektor(const std::vector<double>& v)
+		: Vektor(v) {}
+
 	void CMyVektorSetDimension(int dim) {
 		if (dim > 0) {
 			dimension = dim;
@@ -44,27 +49,48 @@ public:
 		}
 	}
 
-	void CMyVektorPrint() const{
+	// Hilfsfunktion
+	void Print() const{
 		std::cout << "[ ";
-		for (int i = 0; i <= dimension-1; i++) {
-			if (i == dimension-1)
-				std::cout << Vektor[i] << " ";
+		for (double komponente : Vektor) {
+			if (komponente == Vektor.back())
+				std::cout << komponente << " ";
 			else 
-				std::cout << Vektor[i] << " ; ";
+				std::cout << komponente << "; ";
 		}
 		std::cout << "]" << std::endl;
 	}
 
+	// Länge Vektor
 	double CMyVektorLength() {
 		double VektorLength = 1;
-		for (int i = 0; i <= dimension - 1; i++) {
+		for (int i = 0; i <= dimension-1; i++) {
 			VektorLength += pow(Vektor[i],2);
 		}
-		sqrt(VektorLength);
+		return sqrt(VektorLength);
 	}
 
-	/*CMyVektor operator+(CMyVektor a, CMyVektor b) {
+	// Vektoraddition & Skalare Mult implementieren
 
-	}*/
+	CMyVektor operator+(const CMyVektor& otherVektor) const {
+		std::vector<double> ergebnisVektor;
+		for (int i = 0; i < Vektor.size(); i++) {
+			ergebnisVektor.push_back(Vektor[i] + otherVektor.Vektor[i]);
+		}
+		return CMyVektor(ergebnisVektor);
+	}
 
+	CMyVektor operator*(double lambda) const {
+		std::vector<double> ergebnisVektor;
+		for (double komponente : Vektor) {
+			ergebnisVektor.push_back(komponente * lambda);
+		}
+		return CMyVektor(ergebnisVektor);
+	}
+
+	// Gradient Funktion
+
+	//CMyVektor gradient(CMyVektor x, double (*funktion)(CMyVektor x)) {
+
+	//}
 };
