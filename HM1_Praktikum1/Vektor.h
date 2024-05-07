@@ -1,4 +1,4 @@
-#pragma once 
+﻿#pragma once 
 #include <cmath>
 #include <vector>
 
@@ -16,13 +16,14 @@ public:
 	CMyVektor(const std::vector<double>& v)
 		: Vektor(v) {}
 
+	// Dimension des Vektors setzten & mit 0 füllen
 	void CMyVektorSetDimension(int dim) {
 		if (dim > 0) {
 			dimension = dim;
-			for (int i = 0; i <= dimension-1; i++) {
+			for (int i = 0; i <= dimension - 1; i++) {
 				Vektor.push_back(0);
-		}
 			}
+		}
 		else
 			std::cout << "Ungueltige Dimension!" << std::endl;
 	}
@@ -32,9 +33,9 @@ public:
 	}
 
 	void CMyVektorSetComponent(double comp, int pos) {
-		position = pos-1;
+		position = pos - 1;
 		if (position <= dimension) {
-			for (int i = 0; i <= dimension-1; i++)
+			for (int i = 0; i <= dimension - 1; i++)
 				if (i == position)
 					Vektor[i] = comp;
 		}
@@ -42,30 +43,32 @@ public:
 			std::cout << "Komponente existiert nicht!" << std::endl;
 	}
 
-	double CMyVektorGetComponent() {
-		for (int i = 0; i <= dimension-1; i++) {
-			if (i == position)
-				return Vektor[position];
+	double CMyVektorGetComponent(int pos) {
+		for (int i = 0; i < dimension; i++) {
+			if (i == pos)
+				return Vektor[i];
 		}
+		// Fehlermeldung einbauen
+		return 0;
 	}
 
-	// Hilfsfunktion
-	void Print() const{
+	// Vektor ausgeben
+	void Print() const {
 		std::cout << "[ ";
 		for (double komponente : Vektor) {
 			if (komponente == Vektor.back())
 				std::cout << komponente << " ";
-			else 
+			else
 				std::cout << komponente << "; ";
 		}
 		std::cout << "]" << std::endl;
 	}
 
-	// L�nge Vektor
+	// Laenge Vektor
 	double CMyVektorLength() {
 		double VektorLength = 1;
-		for (int i = 0; i <= dimension-1; i++) {
-			VektorLength += pow(Vektor[i],2);
+		for (int i = 0; i <= dimension - 1; i++) {
+			VektorLength += pow(Vektor[i], 2);
 		}
 		return sqrt(VektorLength);
 	}
@@ -90,7 +93,36 @@ public:
 
 	// Gradient Funktion
 
-	//CMyVektor gradient(CMyVektor x, double (*funktion)(CMyVektor x)) {
+	CMyVektor gradient(CMyVektor& x, double (*funktion)(CMyVektor)) {
 
-	//}
+		// Wert für h
+		const double h = 1e-8;
+
+		CMyVektor gradientVector;
+		gradientVector.CMyVektorSetDimension(x.CMyVektorGetDimension()); // Gradientenvektor mit gleicher Dimension wie x
+
+		for (int i = 0; i < dimension; ++i) {
+
+			// Kopie von x
+			CMyVektor x_plus_h = x;
+
+			// Stelle x_i mit h addieren
+			x_plus_h.CMyVektorSetComponent(x.CMyVektorGetComponent(i) + h, i+1);
+
+			// Berechnung x_i + h in Funktion f(x_1,...,x_(i-1),x_i+h,x_(i+1),...,x_n)
+			double f_x_plus_h = (*funktion)(x_plus_h);
+
+			// Funktion selbst f(x_1,...,x_n)
+			double f_x = (*funktion)(x);
+
+			// Berechnung Gradient für i-te Komponente
+			double gradient_i = (f_x_plus_h - f_x) / h;
+
+			// i-te Komponente des Gradientenvektors setzen
+			gradientVector.CMyVektorSetComponent(gradient_i, i + 1);
+		}
+
+		return gradientVector;
+	}
+
 };
